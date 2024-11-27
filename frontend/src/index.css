@@ -1,0 +1,101 @@
+/* Сброс стилей для браузера */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+body {
+    background: linear-gradient(to bottom right, #d8d8f1, #ffffff, #bfdbfe);
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Основной контейнер для страницы */
+.container {
+    width: 100%;
+    /* max-width: 1200px; */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+/* Стили для форм */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+input,
+select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #1a1a1a;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+button[type='submit'] {
+    background-color: #28a745;
+    color: #fff;
+}
+
+button[type='submit']:hover {
+    background-color: #218838;
+}
+
+/* Стили для сообщений об ошибках */
+.error-message {
+    color: #dc3545;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Стили для страницы 404 */
+.not-found {
+    text-align: center;
+    margin-top: 50px;
+    color: #dc3545;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Стили для профиля */
+.profile {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.profile h2 {
+    margin-bottom: 20px;
+}
