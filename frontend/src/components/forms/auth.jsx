@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { AuthTabs } from './auth-tabs'
 import { LoginForm } from './login-form'
 import { ClientRegisterForm } from './client-register-form'
-import { ClinicRegisterForm } from './admin-register-form'
+import { AdminRegisterForm } from './admin-register-form'
 
 export default function AuthPage() {
   const [currentTab, setCurrentTab] = useState('login')
@@ -16,7 +16,7 @@ export default function AuthPage() {
       case 'client-register':
         return <ClientRegisterForm />;
       case 'clinic-register':
-        return <ClinicRegisterForm />;
+        return <AdminRegisterForm />;
       default:
         return null
     }

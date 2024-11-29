@@ -31,16 +31,13 @@ const Navbar = (ъ) => {
                 <HomeIcon className="w-4 h-4 inline-block mr-1" />
                 Главная
               </Link>
-              {userRole === "admin" && (
+              {userRole === "ADMIN" && (
                 <>
                   <Link to="/users" className="text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium">
                     <UsersIcon className="w-4 h-4 inline-block mr-1" />
                     Пользователи
                   </Link>
-                  <Link to="/analytics" className="text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium">
-                    <BarChartIcon className="w-4 h-4 inline-block mr-1" />
-                    Аналитика
-                  </Link>
+                  
                 </>
               )}
               <Link to="/profile" className="text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium">

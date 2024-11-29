@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TableSwitcher from '../components/worker/TableSwitcher';
 
-
 function Workers() {
+
   return (
     <div >
       <TableSwitcher />
