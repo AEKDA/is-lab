@@ -12,10 +12,11 @@ export const AdminRegisterForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post("/auth/register/admin", credentials);
-      localStorage.setItem("token", response.data.token);
       localStorage.setItem("login", credentials.username);
-      localStorage.setItem("role", response.data.role);
-      window.location.href = "/";
+      localStorage.setItem("token", "token");
+      localStorage.setItem("password", credentials.password);
+      window.location.href = "/waitlist";
+      console.log('Заявка отпарвлена в waitlist')
     } catch (error) {
       console.error("Ошибка при входе:", error);
     }

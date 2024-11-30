@@ -1,6 +1,5 @@
 package islab1.controllers;
 
-
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -39,7 +38,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final UserRepo userRepo;
-    private final UserMapper userMapper; 
+    private final UserMapper userMapper;
     private final AdminRequestRepo adminRequestRepo;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -47,25 +46,26 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @Valid @RequestBody RegisterRequest request) {
-        if (userRepo.getUserByUsername(request.getUsername()) != null || adminRequestRepo.getAdminRequestByUsername(request.getUsername()) != null) {
+        if (userRepo.getUserByUsername(request.getUsername()) != null
+                || adminRequestRepo.getAdminRequestByUsername(request.getUsername()) != null) {
             return ResponseEntity.status(400).body(null);
         }
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
-
     @PostMapping("/register/admin")
     public ResponseEntity<AuthenticationResponse> registerAdmin(
             @Valid @RequestBody RegisterRequest request) {
         if (userRepo.getUserByUsername(request.getUsername()) != null) {
-            return ResponseEntity.status(400).body(new AuthenticationResponse("User with that name already exists", Role.UNDEFINED));
+            return ResponseEntity.status(400)
+                    .body(new AuthenticationResponse("User with that name already exists", Role.UNDEFINED));
         }
-        if (userRepo.getUsersByRole(Role.ADMIN).isEmpty()){
+        if (userRepo.getUsersByRole(Role.ADMIN).isEmpty()) {
             return ResponseEntity.ok(authenticationService.registerAdmin(request));
-        }
-        else{
+        } else {
             if (adminRequestRepo.getAdminRequestByUsername(request.getUsername()) != null) {
-                return ResponseEntity.status(400).body(new AuthenticationResponse("User with that name already exists", Role.UNDEFINED));
+                return ResponseEntity.status(400)
+                        .body(new AuthenticationResponse("User with that name already exists", Role.UNDEFINED));
             }
             return ResponseEntity.status(202).body(authenticationService.addRegisterAdminRequest(request));
         }
@@ -75,15 +75,15 @@ public class AuthenticationController {
     public ResponseEntity<String> acceptRegistrationRequest(
             @PathVariable("request_id") long requestId) {
         AdminRequest adminRequest = null;
-        try{
+        try {
             adminRequest = adminRequestRepo.findById(requestId).get();
-        }catch(NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(400).body("Request with that id doesn't exists");
         }
-        if(adminRequest == null){
+        if (adminRequest == null) {
             return ResponseEntity.status(400).body("Request with that id doesn't exists");
         }
-        if(adminRequest.getReviewer() != null){
+        if (adminRequest.getReviewer() != null) {
             return ResponseEntity.status(400).body("Request with that id already accepted");
         }
         authenticationService.acceptAdminRequest(adminRequest);
@@ -93,7 +93,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/register/accept")
-    public ResponseEntity<List<AdminRequestDTO>> getRequests(){
+    public ResponseEntity<List<AdminRequestDTO>> getRequests() {
         List<AdminRequest> requests = adminRequestRepo.findAll();
         List<AdminRequestDTO> result = authenticationService.convertRequestsToDTO(requests);
         return ResponseEntity.status(200).body(result);
@@ -105,13 +105,13 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
-
     @PostMapping("/login_tmp")
-    public ResponseEntity<AuthenticationResponse> acceptRegistrationRequest(@RequestBody UserDTO UserDTO){
+    public ResponseEntity<AuthenticationResponse> acceptRegistrationRequest(@RequestBody UserDTO UserDTO) {
         User currentUser = authenticationService.getCurrentUser();
-        if(!UserDTO.getUsername().equals(currentUser.getUsername())){
-            if(userRepo.existsByUsername(UserDTO.getUsername())){
-                return ResponseEntity.status(400).body(new AuthenticationResponse("User with that name already exists", Role.UNDEFINED));
+        if (!UserDTO.getUsername().equals(currentUser.getUsername())) {
+            if (userRepo.existsByUsername(UserDTO.getUsername())) {
+                return ResponseEntity.status(400)
+                        .body(new AuthenticationResponse("User with that name already exists", Role.UNDEFINED));
             }
         }
         User updatedUser = null;
@@ -131,4 +131,3 @@ public class AuthenticationController {
     }
 
 }
-

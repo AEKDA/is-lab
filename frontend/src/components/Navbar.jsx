@@ -48,7 +48,7 @@ const Navbar = (ъ) => {
           )}
           {isLoggedIn && (
             <div className="flex items-center">
-              <span className="text-gray-700 dark:text-gray-300 mr-4">Добро пожаловать, {userRole === "admin" ? "Администратор" : "Пользователь"}</span>
+              <span className="text-gray-700 dark:text-gray-300 mr-4">Добро пожаловать, {userRole === "ADMIN" ? "Администратор" : "Пользователь"}</span>
               <button onClick={onLogout} variant="outline" className="hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900 dark:hover:text-red-400 transition-colors">
                 Выйти
               </button>

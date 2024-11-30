@@ -29,12 +29,12 @@ export const addressFields = [
 ];
 
 export const coordinatesFields = [
-    { key: 'y', label: 'X', type: 'number' },
-    { key: 'x', label: 'Y', type: 'number' },
+    { key: 'x', label: 'X', type: 'number' },
+    { key: 'y', label: 'Y', type: 'number' },
 ];
 
 export const locationFields = [
     { key: 'name', label: 'Name' },
-    { key: 'y', label: 'X', type: 'number' },
-    { key: 'x', label: 'Y', type: 'number' },
+    { key: 'x', label: 'X', type: 'number' },
+    { key: 'y', label: 'Y', type: 'number' },
 ];

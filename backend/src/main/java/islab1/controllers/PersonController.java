@@ -92,9 +92,9 @@ public class PersonController {
         if (!locationService.existById(personDTO.getLocationId())) {
             return ResponseEntity.status(400).header("ErrMessage", "Location with that id does not exist").body(null);
         }
-        if (locationService.getLocationById(personDTO.getLocationId()).getCreator() != user) {
-            return ResponseEntity.status(400).header("ErrMessage", "You cannot update an object linked to a location you don't own").body(null);
-        }
+        // if (locationService.getLocationById(personDTO.getLocationId()).getCreator() != user) {
+        //     return ResponseEntity.status(400).header("ErrMessage", "You cannot update an object linked to a location you don't own").body(null);
+        // }
         if (user.getRole() != Role.ADMIN && !personService.checkAccess(user, id)) {
             return ResponseEntity.status(403).header("ErrMessage", "Access denied").body(null);
         }

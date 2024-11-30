@@ -16,6 +16,7 @@ export const LoginForm = () => {
       localStorage.setItem("role", response.data.role);
       window.location.href = "/";
     } catch (error) {
+      // useError({ type: 'SET_ERROR', payload: 'Не удалось одобрить пользователя. Пожалуйста, попробуйте еще раз.' })
       console.error("Ошибка при входе:", error);
     }
   };

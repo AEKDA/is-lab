@@ -5,8 +5,9 @@ import Navbar from './components/Navbar';
 import AuthPage from './components/forms/auth';
 import { InfoForm } from './components/forms/info-form';
 import UsersTable from './pages/users-table';
+import WaitList from './pages/wait-list';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Navbar />
@@ -23,6 +24,7 @@ const AppContent = () => {
       <Route path="/" element={<Workers />} />
       <Route path="/profile" element={<InfoForm />} />
       <Route path="/users" element={<UsersTable />} />
+      <Route path="/waitlist" element={<WaitList />} />
       <Route path="/login" element={<AuthPage />} />
     </Routes>
   );
