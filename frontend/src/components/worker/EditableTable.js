@@ -19,13 +19,14 @@ import {
 } from '@mui/material';
 import axios from '../../api/axiosInstance';
 
-const EditableTable = ({ columns, entity, newEntity, fields }) => {
+const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => {
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [filterMode, setFilterMode] = useState('exact');
   const [columnFilters, setColumnFilters] = useState([])
+  const [sorting, setSorting] = useState([])
 
   // Функция для загрузки данных с сервера
   const fetchData = async () => {
@@ -60,8 +61,8 @@ const EditableTable = ({ columns, entity, newEntity, fields }) => {
   }, [entity]);
 
   const [pagination, setPagination] = useState({
-    pageIndex: 0, //initial page index
-    pageSize: 10, //default page size
+    pageIndex: 0,
+    pageSize: 10,
   });
 
   const tableInstance = useReactTable(
@@ -73,11 +74,12 @@ const EditableTable = ({ columns, entity, newEntity, fields }) => {
       getCoreRowModel: getCoreRowModel(),
       getSortedRowModel: getSortedRowModel(),
       onPaginationChange: setPagination,
+      onSortingChange: setSorting,
       onColumnFiltersChange: setColumnFilters,
       filterFns: {
         customFilter: customFilter
       },
-      state: { pagination, columnFilters },
+      state: { pagination, columnFilters, sorting },
     }
   );
 
@@ -122,6 +124,7 @@ const EditableTable = ({ columns, entity, newEntity, fields }) => {
     // Форматируем в нужный вид
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
+
   // Обработчик для удаления строки
   const handleDelete = async () => {
     try {
@@ -150,10 +153,6 @@ const EditableTable = ({ columns, entity, newEntity, fields }) => {
     }
   }, [newEntity]);
 
-  const handleColumnFilterChange = (id, value) => {
-
-  }
-
   return (
     <Box sx={{ padding: '20px', width: '100%', overflow: 'auto' }}>
       <Button variant="contained" onClick={toggleFilterMode} sx={{ mb: 2 }}>
@@ -165,23 +164,18 @@ const EditableTable = ({ columns, entity, newEntity, fields }) => {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
                 <TableCell key={column.id}
+                  onClick={column.column.getToggleSortingHandler()}
                   sx={{
-                    // whiteSpace: 'nowrap',
-                    // overflow: 'hidden',
-                    // textOverflow: 'ellipsis',
-                    // maxWidth: 150,
-                    // flexDirection: 'column'
                     textAlign: 'center'
                   }}>
                   {
-
                     flexRender(
                       column.column.columnDef.header,
                       column.getContext()
                     )}
                   <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
+                    {column.column.getIsSorted() ? (
+                      column.column.getIsSorted() === 'asc'? (
                         <BiSortUp />
                       ) : (
                         <BiSortDown />
