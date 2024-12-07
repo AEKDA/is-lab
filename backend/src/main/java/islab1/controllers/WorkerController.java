@@ -118,7 +118,8 @@ public class WorkerController {
         try {
             workerService.deleteWorker(id);
         } catch (Exception e) {
-            return ResponseEntity.status(400).header("ErrMessage", "Unable to delete worker, it is linked to other entities").body(null);
+            return ResponseEntity.status(400)
+                    .header("ErrMessage", "Unable to delete worker, it is linked to other entities").body(null);
         }
         return ResponseEntity.ok().build();
     }
@@ -127,15 +128,18 @@ public class WorkerController {
         if (!coordinatesService.existById(workerDTO.getCoordinatesId())) {
             return ResponseEntity.status(400).header("ErrMessage", "Coordinates with that id do not exist").body(null);
         }
-        if (coordinatesService.getCoordinatesById(workerDTO.getCoordinatesId()).getCreator() != user) {
-            return ResponseEntity.status(400).header("ErrMessage", "Cannot link object with coordinates not created by you").body(null);
+        if (coordinatesService.getCoordinatesById(workerDTO.getCoordinatesId()).getCreator() != user
+                && user.getRole() != Role.ADMIN) {
+            return ResponseEntity.status(400)
+                    .header("ErrMessage", "Cannot link object with coordinates not created by you").body(null);
         }
-        
+
         if (!personService.existById(workerDTO.getPersonId())) {
             return ResponseEntity.status(400).header("ErrMessage", "Person with that id does not exist").body(null);
         }
-        if (personService.getPersonById(workerDTO.getPersonId()).getCreator() != user) {
-            return ResponseEntity.status(400).header("ErrMessage", "Cannot link object with person not created by you").body(null);
+        if (personService.getPersonById(workerDTO.getPersonId()).getCreator() != user && user.getRole() != Role.ADMIN) {
+            return ResponseEntity.status(400).header("ErrMessage", "Cannot link object with person not created by you")
+                    .body(null);
         }
 
         return null;

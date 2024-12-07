@@ -69,8 +69,10 @@ public class PersonController {
         if (!locationService.existById(personDTO.getLocationId())) {
             return ResponseEntity.status(400).header("ErrMessage", "Location with that id does not exist").body(null);
         }
-        if (locationService.getLocationById(personDTO.getLocationId()).getCreator() != user) {
-            return ResponseEntity.status(400).header("ErrMessage", "You cannot create an object linked to a location you don't own").body(null);
+        if (locationService.getLocationById(personDTO.getLocationId()).getCreator() != user
+                && user.getRole() != Role.ADMIN) {
+            return ResponseEntity.status(400)
+                    .header("ErrMessage", "You cannot create an object linked to a location you don't own").body(null);
         }
         personDTO.setCreatorId(user.getId());
         Person person;
@@ -92,9 +94,11 @@ public class PersonController {
         if (!locationService.existById(personDTO.getLocationId())) {
             return ResponseEntity.status(400).header("ErrMessage", "Location with that id does not exist").body(null);
         }
-        // if (locationService.getLocationById(personDTO.getLocationId()).getCreator() != user) {
-        //     return ResponseEntity.status(400).header("ErrMessage", "You cannot update an object linked to a location you don't own").body(null);
-        // }
+        if (locationService.getLocationById(personDTO.getLocationId()).getCreator() != user
+                && user.getRole() != Role.ADMIN) {
+            return ResponseEntity.status(400)
+                    .header("ErrMessage", "You cannot update an object linked to a location you don't own").body(null);
+        }
         if (user.getRole() != Role.ADMIN && !personService.checkAccess(user, id)) {
             return ResponseEntity.status(403).header("ErrMessage", "Access denied").body(null);
         }
@@ -120,7 +124,8 @@ public class PersonController {
         try {
             personService.deletePerson(id);
         } catch (Exception e) {
-            return ResponseEntity.status(400).header("ErrMessage", "Unable to delete entity because it is used in another entity").body(null);
+            return ResponseEntity.status(400)
+                    .header("ErrMessage", "Unable to delete entity because it is used in another entity").body(null);
         }
         return ResponseEntity.ok().build();
     }

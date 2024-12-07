@@ -17,10 +17,10 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import axios from '../../api/axiosInstance';
+import dateFormat from './time-format';
+import { useTableContext } from 'src/pages/table-context';
 
-const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => {
-  const [data, setData] = useState([]);
+const EditableTable = ({ columns, fields, onDelete, onUpdate }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editedData, setEditedData] = useState({});
@@ -28,15 +28,7 @@ const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => 
   const [columnFilters, setColumnFilters] = useState([])
   const [sorting, setSorting] = useState([])
 
-  // Функция для загрузки данных с сервера
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`/${entity}`);
-      setData(response.data);
-    } catch (error) {
-      console.error('Ошибка при загрузке данных:', error);
-    }
-  };
+  const { storageEntities } = useTableContext()
 
   // Обработчик переключения режима фильтрации
   const toggleFilterMode = () => {
@@ -44,21 +36,17 @@ const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => 
   };
 
   const customFilter = (row, columnId, filterValue) => {
-    console.log('last', row, columnId, filterValue)
     const rowValue = String(row.getValue(columnId) || '').toLowerCase();
     const searchValue = String(filterValue || '').toLowerCase();
 
     if (filterMode === 'exact') {
       return rowValue === searchValue;
+    } else if (filterMode === 'startsWith') {
+      return rowValue.startsWith(searchValue);
     } else {
       return rowValue.startsWith(searchValue);
     }
   };
-
-
-  useEffect(() => {
-    fetchData();
-  }, [entity]);
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -68,7 +56,7 @@ const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => 
   const tableInstance = useReactTable(
     {
       columns,
-      data,
+      data: storageEntities,
       getPaginationRowModel: getPaginationRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
       getCoreRowModel: getCoreRowModel(),
@@ -98,60 +86,6 @@ const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => 
     setIsDialogOpen(true);
   };
 
-  // Обработчик для обновления строки
-  const handleSave = async () => {
-    try {
-      await axios.put(`/${entity}/${editedData.id}`, editedData);
-      fetchData();
-      setIsDialogOpen(false);
-    } catch (error) {
-      console.error('Ошибка при обновлении данных:', error);
-    }
-  };
-
-  const make_native = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-
-    // Получаем компоненты даты и времени
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-
-    // Форматируем в нужный вид
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  };
-
-  // Обработчик для удаления строки
-  const handleDelete = async () => {
-    try {
-      await axios.delete(`/${entity}/${selectedRow.original.id}`);
-      fetchData();
-      setIsDialogOpen(false);
-      setSelectedRow(null);
-    } catch (error) {
-      console.error('Ошибка при удалении данных:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (newEntity && newEntity != null) {
-      setData((prevData) => {
-        const existingIndex = prevData.findIndex((item) => item.id === newEntity.id);
-
-        if (existingIndex !== -1) {
-          // Если объект с таким id уже существует, заменяем его
-          return prevData.map((item) => (item.id === newEntity.id ? newEntity : item));
-        } else {
-          // Если объекта с таким id нет, добавляем его в начало
-          return [newEntity, ...prevData];
-        }
-      });
-    }
-  }, [newEntity]);
 
   return (
     <Box sx={{ padding: '20px', width: '100%', overflow: 'auto' }}>
@@ -175,7 +109,7 @@ const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => 
                     )}
                   <span>
                     {column.column.getIsSorted() ? (
-                      column.column.getIsSorted() === 'asc'? (
+                      column.column.getIsSorted() === 'asc' ? (
                         <BiSortUp />
                       ) : (
                         <BiSortDown />
@@ -241,7 +175,7 @@ const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => 
           Последняя
         </Button>
         <span>
-          Страница {getState().pagination.pageIndex + 1} из {getPageCount()}
+          Страница {getState().pagination.pageIndex + 1} из {getPageCount() === 0 ? 1 : getPageCount()}
         </span>
       </Box>
 
@@ -276,7 +210,7 @@ const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => 
                 type={field.type || 'text'}
                 value={
                   field.type === 'datetime-local'
-                    ? make_native(editedData[field.key])
+                    ? dateFormat(editedData[field.key])
                     : editedData[field.key] || ''
                 }
                 onChange={(e) => setEditedData({ ...editedData, [field.key]: e.target.value })}
@@ -287,11 +221,11 @@ const EditableTable = ({ columns, entity, newEntity, fields, onItemChange }) => 
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSave}>Сохранить</Button>
-          <Button onClick={handleDelete} color="error">
+          <Button onClick={() => { onUpdate(editedData.id, editedData); setIsDialogOpen(false); }}>Сохранить</Button>
+          <Button onClick={() => { onDelete(selectedRow.original.id); setIsDialogOpen(false); }} color="error">
             Удалить
           </Button>
-          <Button onClick={() => setIsDialogOpen(false)}>Отмена</Button>
+          <Button onClick={() => { setIsDialogOpen(false); }}>Отмена</Button>
         </DialogActions>
       </Dialog>
     </Box >
