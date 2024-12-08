@@ -5,7 +5,10 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.dao.CannotSerializeTransactionException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import islab1.exceptions.ConvertionException;
 import islab1.mappers.WorkerMapper;
@@ -39,9 +42,18 @@ public class WorkerService {
         return workerRepo.existsById(id);
     }
 
-    public Worker createWorker(WorkerDTO workerDTO) throws ConvertionException {
-        Worker worker = workerMapper.toEntity(workerDTO);
-        return workerRepo.save(worker);
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public Worker createWorker(WorkerDTO workerDTO) throws Exception {
+        try {
+            List<Worker> workers = workerRepo.getWorkerByPersonId(workerDTO.getPersonId());
+            if (workers.size() > 5) {
+                throw new RuntimeException();
+            }
+            Worker worker = workerMapper.toEntity(workerDTO);
+            return workerRepo.save(worker);
+        } catch (CannotSerializeTransactionException e) {
+            throw e;
+        }
     }
 
     public Worker updateWorker(Long id, WorkerDTO workerDTO) throws ConvertionException, EntityNotFoundException {
@@ -50,7 +62,7 @@ public class WorkerService {
             throw new EntityNotFoundException("There is no worker with id " + id);
         }
         Worker worker = getWorkerById(id);
-        
+
         newWorker.setId(id);
         newWorker.setCreator(worker.getCreator());
         workerRepo.save(newWorker);
@@ -71,8 +83,8 @@ public class WorkerService {
 
     public List<WorkerDTO> convertWorkersToDTOs(List<Worker> workers) {
         return workers.stream()
-            .map(workerMapper::toDto)
-            .collect(Collectors.toList());
+                .map(workerMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     public WorkerDTO convertWorkerToDTO(Worker worker) {

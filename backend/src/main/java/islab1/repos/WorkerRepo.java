@@ -9,6 +9,8 @@ import islab1.models.Worker;
 import islab1.models.auth.User;
 
 @Repository
-public interface  WorkerRepo extends JpaRepository<Worker, Long>{
+public interface WorkerRepo extends JpaRepository<Worker, Long> {
     List<Worker> getWorkerByCreator(User user);
+
+    List<Worker> getWorkerByPersonId(Long id);
 }

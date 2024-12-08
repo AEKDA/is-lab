@@ -76,7 +76,7 @@ public class WorkerController {
         Worker worker;
         try {
             worker = workerService.createWorker(workerDTO);
-        } catch (ConvertionException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(400).header("ErrMessage", e.getMessage()).body(null);
         }
         workerDTO = workerService.convertWorkerToDTO(worker);

@@ -1,0 +1,98 @@
+[
+    {
+        "name": "new from file",
+        "coordinates": {
+            "x": 99,
+            "y": 99
+        },
+        "person": {
+            "location": {
+                "x": 99,
+                "y": 99,
+                "name": "file location"
+            },
+            "eyeColor": "WHITE",
+            "weight": 176,
+            "hairColor": "WHITE"
+        },
+        "organization": {
+            "officialAddress": {
+                "zipCode": "354340"
+            },
+            "fullName": "FILE NAME ORGANIZATION",
+            "annualTurnover": 12,
+            "employeesCount": 12345,
+            "type": "COMMERCIAL"
+        },
+        "salary": 231231,
+        "rating": 12,
+        "startDate": "2024-12-11",
+        "creationDate": "2024-12-11T10:15:30.000",
+        "endDate": "2024-12-11T10:15:30.000",
+        "position": "HUMAN_RESOURCES"
+    },
+    {
+        "name": "new from file 2",
+        "coordinates": {
+            "x": 99,
+            "y": 99
+        },
+        "person": {
+            "location": {
+                "x": 99,
+                "y": 99,
+                "name": "file location"
+            },
+            "eyeColor": "WHITE",
+            "weight": 176,
+            "hairColor": "WHITE"
+        },
+        "organization": {
+            "officialAddress": {
+                "zipCode": "354340"
+            },
+            "fullName": "FILE NAME ORGANIZATION",
+            "annualTurnover": 12,
+            "employeesCount": 12345,
+            "type": "COMMERCIAL"
+        },
+        "salary": 231231,
+        "rating": 12,
+        "startDate": "2024-12-11",
+        "creationDate": "2024-12-11T10:15:30.000",
+        "endDate": "2024-12-11T10:15:30.000",
+        "position": "HUMAN_RESOURCES"
+    },
+    {
+        "name": "new from file 3",
+        "coordinates": {
+            "x": 99,
+            "y": 99
+        },
+        "person": {
+            "location": {
+                "x": 99,
+                "y": 99,
+                "name": "file location"
+            },
+            "eyeColor": "WHITE",
+            "weight": 176,
+            "hairColor": "WHITE"
+        },
+        "organization": {
+            "officialAddress": {
+                "zipCode": "354340"
+            },
+            "fullName": "FILE NAME ORGANIZATION",
+            "annualTurnover": 12,
+            "employeesCount": 12345,
+            "type": "COMMERCIAL"
+        },
+        "salary": 231231,
+        "rating": 12,
+        "startDate": "2024-12-11",
+        "creationDate": "2024-12-11T10:15:30.000",
+        "endDate": "2024-12-11T10:15:30.000",
+        "position": "HUMAN_RESOURCES"
+    }
+]

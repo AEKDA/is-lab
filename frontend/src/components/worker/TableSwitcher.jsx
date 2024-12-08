@@ -13,6 +13,7 @@ import {
     InputLabel,
     FormHelperText,
     TextField,
+    Input,
 } from '@mui/material';
 import axios from '../../api/axiosInstance';
 import EditableTable from './EditableTable';
@@ -23,6 +24,7 @@ import {
     addresesColumns,
     coordinatesColumns,
     locationsColumns,
+    historyColumns,
 } from './TableConfig';
 
 import { workerFields, organizationFields, personFields, addressFields, coordinatesFields, locationFields } from './FormConfig';
@@ -32,7 +34,6 @@ import { Alert } from '../forms/ui/alert';
 
 
 const TABLE_STATE_DYNAMIC = 'DYNAMIC';
-const TABLE_STATE_STATIC = '';
 
 // Конфигурации таблиц.
 const tablesConfig = {
@@ -70,6 +71,12 @@ const tablesConfig = {
         label: 'Locations',
         entity: 'locations',
         columns: locationsColumns,
+        fields: locationFields,
+    },
+    history: {
+        label: 'History',
+        entity: 'history',
+        columns: historyColumns,
         fields: locationFields,
     },
 };
@@ -167,6 +174,7 @@ const TableSwitcher = () => {
         if (selectedAction === 'delete' && addictionActionData.endDate) return true;
         if (selectedAction === 'sumRating') return true;
         if (selectedAction === 'indexSalary' && addictionActionData.workerId && addictionActionData.salaryFactor) return true;
+        if (selectedAction === 'importFile') return true;
         return false;
     };
 
@@ -177,8 +185,32 @@ const TableSwitcher = () => {
             handleSumRating();
         } else if (selectedAction === 'indexSalary') {
             handleIndexSalary();
+        } else if (selectedAction === 'importFile') {
+            onFileUpload();
         }
     };
+
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [message, setMessage] = useState('');
+
+    const onFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
+    const onFileUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        try {
+            const response = await axios.post('/uploader/import', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+
+            const result = await response.text();
+            setMessage(result);
+        } catch (error) {
+            setMessage('Ошибка при загрузке файла');
+        }
+    };
+
 
     // Удаление объектов с заданным endDate.
     const handleDeleteByEndDate = async () => {
@@ -327,6 +359,7 @@ const TableSwitcher = () => {
                             <MenuItem value="delete">Удалить по End Date</MenuItem>
                             <MenuItem value="sumRating">Сумма рейтингов всех работников</MenuItem>
                             <MenuItem value="indexSalary">Индексация зарплаты</MenuItem>
+                            <MenuItem value="importFile">загрузка файла</MenuItem>
                         </Select>
                         <FormHelperText>Выберите действие, для которого будут отображены поля</FormHelperText>
                     </FormControl>
@@ -343,10 +376,10 @@ const TableSwitcher = () => {
                             InputLabelProps={{ shrink: true }}
                         />
                     )}
-                    {/* Поля для действия "Фильтровать по End Date"
-                    {selectedAction === 'sumRating' && (
-                    <h1>s</h1>
-                    )} */}
+                    {/* Поля для действия "Фильтровать по End Date"*/}
+                    {selectedAction === 'importFile' && (
+                        <Input type="file" onChange={onFileChange} />
+                    )}
 
                     {/* Поля для действия "Индексация зарплаты" */}
                     {selectedAction === 'indexSalary' && (

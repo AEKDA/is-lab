@@ -49,3 +49,10 @@ export const locationsColumns = [
     { filterFn: 'customFilter', header: 'X', accessorKey: 'x' },
     { filterFn: 'customFilter', header: 'Y', accessorKey: 'y' },
 ];
+export const historyColumns = [
+    { filterFn: 'customFilter', header: 'ID', accessorKey: 'id' },
+    { filterFn: 'customFilter', header: 'Creator ID', accessorKey: 'creatorId' },
+    { filterFn: 'customFilter', header: 'Status', accessorKey: 'status' },
+    { filterFn: 'customFilter', header: 'Count', accessorKey: 'count' },
+    { filterFn: 'customFilter', header: 'Created At', accessorKey: 'createdAt' },
+];

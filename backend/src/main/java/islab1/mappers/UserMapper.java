@@ -5,14 +5,11 @@ import org.springframework.stereotype.Component;
 import islab1.exceptions.ConvertionException;
 import islab1.models.DTO.UserDTO;
 import islab1.models.auth.User;
-import islab1.repos.UserRepo;
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
 public class UserMapper {
-
-    private final UserRepo userRepo;
 
     public User toEntity(UserDTO dto) throws ConvertionException {
         try {
@@ -32,5 +29,5 @@ public class UserMapper {
         dto.setPassword("");
         return dto;
     }
-    
+
 }
