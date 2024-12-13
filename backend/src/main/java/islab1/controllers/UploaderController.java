@@ -37,6 +37,7 @@ public class UploaderController {
             uploaderService.importData(file, user);
             return ResponseEntity.ok("Файл успешно импортирован");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ошибка при импорте: " + e.getMessage());
         }
     }

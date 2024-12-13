@@ -150,10 +150,18 @@ const EditableTable = ({ columns, fields, onDelete, onUpdate }) => {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       minWidth: 150,
-                    }}>{flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}</TableCell>
+                    }}>
+                    {cell.column.columnDef.header.toLowerCase().includes('link') ? (
+                      <a href={cell.getValue()} target="_blank" rel="noopener noreferrer">
+                        {"click here for get file"}
+                      </a>
+                    ) : (
+                      flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )
+                    )}
+                  </TableCell>
                 ))}
               </TableRow>
             );

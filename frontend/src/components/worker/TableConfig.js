@@ -55,4 +55,5 @@ export const historyColumns = [
     { filterFn: 'customFilter', header: 'Status', accessorKey: 'status' },
     { filterFn: 'customFilter', header: 'Count', accessorKey: 'count' },
     { filterFn: 'customFilter', header: 'Created At', accessorKey: 'createdAt' },
+    { filterFn: 'customFilter', header: 'File Link', accessorKey: 'fileLink' },
 ];

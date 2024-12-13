@@ -26,6 +26,9 @@ public class HistoryImport {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Lob
+    private String fileLink;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "status cannot be null.")

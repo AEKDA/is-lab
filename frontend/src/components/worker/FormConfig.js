@@ -38,3 +38,7 @@ export const locationFields = [
     { key: 'x', label: 'X', type: 'number' },
     { key: 'y', label: 'Y', type: 'number' },
 ];
+
+export const historyFields = [
+    { key: '', label: '' },
+];

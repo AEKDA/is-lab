@@ -14,4 +14,5 @@ public class HistoryImportDTO {
     private StatusImport status;
     private int count;
     private long creatorId;
+    private String fileLink;
 }

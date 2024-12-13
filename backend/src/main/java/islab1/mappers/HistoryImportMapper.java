@@ -22,6 +22,7 @@ public class HistoryImportMapper {
             dto.setCount(h.getCount());
             dto.setCreatedAt(h.getCreatedAt());
             dto.setStatus(h.getStatus());
+            dto.setFileLink(h.getFileLink());
 
             list.add(dto);
         }

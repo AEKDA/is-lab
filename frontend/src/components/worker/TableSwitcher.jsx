@@ -27,7 +27,7 @@ import {
     historyColumns,
 } from './TableConfig';
 
-import { workerFields, organizationFields, personFields, addressFields, coordinatesFields, locationFields } from './FormConfig';
+import { workerFields, organizationFields, personFields, addressFields, coordinatesFields, locationFields, historyFields } from './FormConfig';
 import dateFormat from './time-format';
 import { useTableContext } from 'src/pages/table-context';
 import { Alert } from '../forms/ui/alert';
@@ -77,7 +77,7 @@ const tablesConfig = {
         label: 'History',
         entity: 'history',
         columns: historyColumns,
-        fields: locationFields,
+        fields: historyFields,
     },
 };
 

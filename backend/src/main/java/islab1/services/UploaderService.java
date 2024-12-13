@@ -1,6 +1,7 @@
 package islab1.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,10 +65,14 @@ public class UploaderService {
     private final AddressMapper addressMapper;
     @Autowired
     private final HistoryImportRepo historyImportRepo;
+    @Autowired
+    private S3Service s3Service;
 
     public void importData(MultipartFile file, User owner) throws Exception {
+        String fileLink = s3Service.uploadFile(generateFolderName(), file);
         HistoryImport historyImport = new HistoryImport();
         historyImport.setCreator(owner);
+        historyImport.setFileLink(fileLink);
         try {
             historyImport.setCount(importEntities(file, owner));
             historyImport.setStatus(StatusImport.SUCCESS);
@@ -75,6 +80,10 @@ public class UploaderService {
             historyImport.setStatus(StatusImport.FAIL);
         }
         historyImportRepo.save(historyImport);
+    }
+
+    private static String generateFolderName() {
+        return "folder-" + UUID.randomUUID().toString();
     }
 
     @Transactional
